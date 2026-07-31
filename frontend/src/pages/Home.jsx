@@ -6,6 +6,7 @@ import Projects from "./Projects";
 import Experience from "./Experience";
 import Contact from "./Contact";
 import Certifications from "../components/Certifications";
+import { Typewriter } from "react-simple-typewriter";
 
 export default function Home() {
   const location = useLocation();
@@ -35,9 +36,21 @@ export default function Home() {
         <div className="mx-auto w-full max-w-6xl px-4">
           <div className="glass-effect rounded-[2rem] border border-slate-200/70 bg-white/80 p-6 shadow-2xl shadow-slate-200/60 dark:border-slate-700/70 dark:bg-slate-900/80 dark:shadow-black/20 sm:p-8 md:p-10 lg:p-12">
             <div className="mx-auto mb-5 inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold uppercase tracking-[0.3em] text-blue-700 shadow-sm dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-300 sm:text-base">
-              <span className="mr-2 h-2.5 w-2.5 rounded-full bg-blue-500"></span>
-              Full-Stack Developer | Odoo ERP Developer
-            </div>
+  <span className="mr-2 h-2.5 w-2.5 rounded-full bg-blue-500"></span>
+
+  <Typewriter
+    words={[
+      "Full-Stack Developer",
+      "Odoo ERP Developer",
+    ]}
+    loop={0}
+    cursor
+    cursorStyle="|"
+    typeSpeed={80}
+    deleteSpeed={50}
+    delaySpeed={1800}
+  />
+</div>
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight text-slate-900 dark:text-white mb-3 md:mb-4">
               Hi, I&apos;m <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-500 bg-clip-text text-transparent">Berihu Araya</span>
