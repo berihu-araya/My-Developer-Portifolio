@@ -1,4 +1,33 @@
+import { useEffect, useRef, useState } from "react";
+
 export default function About() {
+  const imageRef = useRef(null);
+  const aboutRef = useRef(null);
+  const educationRef = useRef(null);
+  const [visibleBlocks, setVisibleBlocks] = useState({});
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleBlocks((current) => ({ ...current, [entry.target.dataset.reveal]: true }));
+          }
+        });
+      },
+      { threshold: 0.2, rootMargin: "0px 0px -8% 0px" }
+    );
+
+    [imageRef, aboutRef, educationRef].forEach((ref) => {
+      if (ref.current) observer.observe(ref.current);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const revealClass = (name, direction) =>
+    `about-reveal about-reveal-${direction} ${visibleBlocks[name] ? "is-visible" : ""}`;
+
   return (
     <section className="section-padding max-w-6xl mx-auto">
       <div className="text-center mb-10 md:mb-16 fade-in">
@@ -7,7 +36,7 @@ export default function About() {
       </div>
 
       <div className="grid items-center gap-8 md:grid-cols-[minmax(280px,0.85fr)_minmax(0,1.15fr)] md:gap-12">
-        <div className="fade-in">
+        <div ref={imageRef} data-reveal="image" className={revealClass("image", "image")}>
           <div className="glass-effect overflow-hidden rounded-2xl p-3 card-shadow">
             <img
               src="/me.png"
@@ -17,8 +46,8 @@ export default function About() {
           </div>
         </div>
 
-        <div className="space-y-6 fade-in-delayed">
-          <div className="glass-effect rounded-2xl p-6 md:p-8 card-shadow">
+        <div className="space-y-6">
+          <div ref={aboutRef} data-reveal="about" className={`${revealClass("about", "content")} glass-effect rounded-2xl p-6 md:p-8 card-shadow`}>
             <h3 className="mb-3 text-xl font-semibold text-slate-800 dark:text-slate-100 md:mb-4 md:text-2xl">About Me</h3>
             <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300 md:text-base">
               Software Engineer with professional experience as a Full-Stack MERN Developer & Odoo ERP Developer. Expert in
@@ -29,7 +58,7 @@ export default function About() {
             </p>
           </div>
 
-          <div className="glass-effect rounded-2xl p-6 card-shadow md:p-8">
+          <div ref={educationRef} data-reveal="education" className={`${revealClass("education", "education")} glass-effect rounded-2xl p-6 card-shadow md:p-8`}>
             <div className="flex items-start gap-3 md:gap-4">
               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 md:h-12 md:w-12">
                 <span className="text-lg text-white md:text-xl">🎓</span>

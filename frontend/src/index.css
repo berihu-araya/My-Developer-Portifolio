@@ -288,8 +288,31 @@
     animation: capabilitySlide 0.45s ease-out;
   }
 
+  .about-reveal {
+    opacity: 0;
+    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .about-reveal-image {
+    transform: translateX(-42px) scale(0.96);
+  }
+
+  .about-reveal-content {
+    transform: translateX(42px);
+  }
+
+  .about-reveal-education {
+    transform: translateY(42px);
+  }
+
+  .about-reveal.is-visible {
+    opacity: 1;
+    transform: translate(0) scale(1);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .animate-capability-slide,
+    .about-reveal,
     .fade-in,
     .fade-in-delayed,
     .slide-in-left,
