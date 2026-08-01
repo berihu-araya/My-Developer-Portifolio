@@ -6,64 +6,42 @@ export default function About() {
         <div className="w-24 md:w-32 h-1.5 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-700 mx-auto rounded-full"></div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-        <div className="glass-effect rounded-2xl p-6 md:p-8 card-shadow fade-in">
-          <div className="mb-6">
-            <h3 className="text-xl md:text-2xl font-semibold text-slate-800 dark:text-slate-100 mb-3 md:mb-4">About Me</h3>
-            <p className="text-slate-700 dark:text-slate-300 leading-relaxed text-sm md:text-base">
+      <div className="grid items-center gap-8 md:grid-cols-[minmax(280px,0.85fr)_minmax(0,1.15fr)] md:gap-12">
+        <div className="fade-in">
+          <div className="glass-effect overflow-hidden rounded-2xl p-3 card-shadow">
+            <img
+              src="/me.png"
+              alt="Berihu Araya"
+              className="aspect-[4/5] w-full rounded-xl object-cover object-center"
+            />
+          </div>
+        </div>
+
+        <div className="space-y-6 fade-in-delayed">
+          <div className="glass-effect rounded-2xl p-6 md:p-8 card-shadow">
+            <h3 className="mb-3 text-xl font-semibold text-slate-800 dark:text-slate-100 md:mb-4 md:text-2xl">About Me</h3>
+            <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300 md:text-base">
               Software Engineer with professional experience as a Full-Stack MERN Developer & Odoo ERP Developer. Expert in
               developing Web Apps & Enterprise Business Solutions. Proficient in React.js, Node.js, Express.js, Python, Django, Odoo
               ERP & databases like PostgreSQL & MongoDB, with hands-on experience developing RESTful APIs, customizing ERP
               modules, and optimizing backend systems. Passionate about delivering clean, maintainable, and high-performance
-              software that solves real-world business challenges
+              software that solves real-world business challenges.
             </p>
           </div>
 
-          <div>
-            <h3 className="text-xl md:text-2xl font-semibold text-slate-800 dark:text-slate-100 mb-3 md:mb-4">My Approach</h3>
-            <p className="text-slate-700 dark:text-slate-300 leading-relaxed text-sm md:text-base">
-              I focus on building clean, maintainable, and scalable software solutions
-              that solve real-world problems. With expertise in modern web technologies
-              and enterprise systems, I deliver high-quality applications that drive
-              business success.
-            </p>
-          </div>
-        </div>
-
-        <div className="space-y-4 md:space-y-6 fade-in-delayed">
-          <div className="bg-white rounded-xl p-5 md:p-6 card-shadow">
-            <div className="flex items-center mb-3 md:mb-4">
-              <div className="w-10 md:w-12 h-10 md:h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center mr-3 md:mr-4 flex-shrink-0">
-                <span className="text-white font-bold text-lg md:text-xl">🎓</span>
+          <div className="glass-effect rounded-2xl p-6 card-shadow md:p-8">
+            <div className="flex items-start gap-3 md:gap-4">
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 md:h-12 md:w-12">
+                <span className="text-lg text-white md:text-xl">🎓</span>
               </div>
               <div>
-                <h4 className="font-semibold text-slate-800 dark:text-slate-100 text-sm md:text-base">Education</h4>
-                <p className="text-slate-600 dark:text-slate-400 text-xs md:text-sm">Mekelle University-Mekelle Institute Of Technology(MU-MIT)</p>
-                <p className="text-slate-600 dark:text-slate-400 text-xs md:text-sm">Bachelor's Degree - Computer Science and Engineering</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl p-5 md:p-6 card-shadow">
-            <div className="flex items-center mb-3 md:mb-4">
-              <div className="w-10 md:w-12 h-10 md:h-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg flex items-center justify-center mr-3 md:mr-4 flex-shrink-0">
-                <span className="text-white font-bold text-lg md:text-xl">💻</span>
-              </div>
-              <div>
-                <h4 className="font-semibold text-slate-800 dark:text-slate-100 text-sm md:text-base">Specialization</h4>
-                <p className="text-slate-600 dark:text-slate-400 text-xs md:text-sm">Full-Stack Development & Odoo ERP Systems</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl p-5 md:p-6 card-shadow">
-            <div className="flex items-center mb-3 md:mb-4">
-              <div className="w-10 md:w-12 h-10 md:h-12 bg-gradient-to-r from-green-600 to-blue-600 rounded-lg flex items-center justify-center mr-3 md:mr-4 flex-shrink-0">
-                <span className="text-white font-bold text-lg md:text-xl">🚀</span>
-              </div>
-              <div>
-                <h4 className="font-semibold text-slate-800 dark:text-slate-100 text-sm md:text-base">Focus</h4>
-                <p className="text-slate-600 dark:text-slate-400 text-xs md:text-sm">Scalable & Maintainable Solutions</p>
+                <h3 className="text-xl font-semibold text-slate-800 dark:text-slate-100 md:text-2xl">Education</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400 md:text-base">
+                  Mekelle University - Mekelle Institute of Technology (MU-MIT)
+                </p>
+                <p className="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400 md:text-base">
+                  Bachelor&apos;s Degree in Computer Science and Engineering
+                </p>
               </div>
             </div>
           </div>
