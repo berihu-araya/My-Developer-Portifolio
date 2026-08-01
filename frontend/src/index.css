@@ -273,6 +273,32 @@
     }
   }
 
+  @keyframes capabilitySlide {
+    from {
+      opacity: 0;
+      transform: translateX(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .animate-capability-slide {
+    animation: capabilitySlide 0.45s ease-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-capability-slide,
+    .fade-in,
+    .fade-in-delayed,
+    .slide-in-left,
+    .slide-in-right,
+    .bounce-in {
+      animation: none;
+    }
+  }
+
   .hover-lift {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }

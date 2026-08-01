@@ -11,9 +11,11 @@ export default function About() {
           <div className="mb-6">
             <h3 className="text-xl md:text-2xl font-semibold text-slate-800 dark:text-slate-100 mb-3 md:mb-4">About Me</h3>
             <p className="text-slate-700 dark:text-slate-300 leading-relaxed text-sm md:text-base">
-              I'm a passionate Software Engineer with professional experience in Odoo ERP development
-                and Full-Stack MERN development. I specialize in building scalable enterprise 
-                solutions, modern web applications, and secure backend systems that solve real-world business challenges.
+              Software Engineer with professional experience as a Full-Stack MERN Developer & Odoo ERP Developer. Expert in
+              developing Web Apps & Enterprise Business Solutions. Proficient in React.js, Node.js, Express.js, Python, Django, Odoo
+              ERP & databases like PostgreSQL & MongoDB, with hands-on experience developing RESTful APIs, customizing ERP
+              modules, and optimizing backend systems. Passionate about delivering clean, maintainable, and high-performance
+              software that solves real-world business challenges
             </p>
           </div>
 

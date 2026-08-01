@@ -12,7 +12,8 @@ const contactSchema = new mongoose.Schema({
     required: [true, 'Email is required'],
     trim: true,
     lowercase: true,
-    match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
+    maxlength: [254, 'Email cannot be more than 254 characters'],
+    match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please enter a valid email']
   },
   message: {
     type: String,

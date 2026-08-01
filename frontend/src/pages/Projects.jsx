@@ -1,6 +1,44 @@
+import { useEffect, useState } from "react";
 import ProjectCard from "../components/ProjectCard";
 
+function ProjectCarouselControls({ items, activeIndex, onSelect, label }) {
+  return (
+    <div className="mt-5 flex items-center justify-between">
+      <button
+        type="button"
+        onClick={() => onSelect(activeIndex - 1)}
+        className="rounded-full border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-blue-500 hover:text-blue-600 dark:border-slate-600 dark:text-slate-200"
+        aria-label={`Show previous ${label}`}
+      >
+        ←
+      </button>
+      <div className="flex gap-2" aria-label={`Choose ${label}`}>
+        {items.map((item, index) => (
+          <button
+            key={item.title}
+            type="button"
+            onClick={() => onSelect(index)}
+            className={`h-2.5 rounded-full transition-all ${index === activeIndex ? "w-8 bg-blue-600" : "w-2.5 bg-slate-300 dark:bg-slate-600"}`}
+            aria-label={`Show ${item.title}`}
+            aria-current={index === activeIndex ? "true" : undefined}
+          />
+        ))}
+      </div>
+      <button
+        type="button"
+        onClick={() => onSelect(activeIndex + 1)}
+        className="rounded-full border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-blue-500 hover:text-blue-600 dark:border-slate-600 dark:text-slate-200"
+        aria-label={`Show next ${label}`}
+      >
+        →
+      </button>
+    </div>
+  );
+}
+
 export default function Projects() {
+  const [activeProject, setActiveProject] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const projects = [
     {
       title: "Plant Disease Detection System",
@@ -46,6 +84,20 @@ export default function Projects() {
     }
   ];
 
+  useEffect(() => {
+    if (isPaused) return undefined;
+
+    const interval = window.setInterval(() => {
+      setActiveProject((current) => (current + 1) % projects.length);
+    }, 5000);
+
+    return () => window.clearInterval(interval);
+  }, [isPaused, projects.length]);
+
+  const showProject = (index) => {
+    setActiveProject((index + projects.length) % projects.length);
+  };
+
   return (
     <section className="section-padding max-w-7xl mx-auto">
       <div className="text-center mb-10 md:mb-16 fade-in">
@@ -56,7 +108,13 @@ export default function Projects() {
         </p>
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+      <div
+        className="hidden gap-6 sm:grid sm:grid-cols-2 lg:grid-cols-3 md:gap-8"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        onFocus={() => setIsPaused(true)}
+        onBlur={() => setIsPaused(false)}
+      >
         {projects.map((project, index) => (
           <div
             key={index}
@@ -76,6 +134,24 @@ export default function Projects() {
             />
           </div>
         ))}
+      </div>
+
+      <div
+        className="sm:hidden"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        onFocus={() => setIsPaused(true)}
+        onBlur={() => setIsPaused(false)}
+      >
+        <div key={projects[activeProject].title} className="animate-capability-slide" aria-live="polite">
+          <ProjectCard {...projects[activeProject]} />
+        </div>
+        <ProjectCarouselControls
+          items={projects}
+          activeIndex={activeProject}
+          onSelect={showProject}
+          label="project"
+        />
       </div>
 
       {/* Call to action */}

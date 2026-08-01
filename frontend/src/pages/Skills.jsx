@@ -1,4 +1,39 @@
+import { useEffect, useState } from "react";
+
+function SkillCategoryCard({ category }) {
+  return (
+    <div className="glass-effect rounded-2xl p-5 md:p-7 card-shadow">
+      <div className="mb-6 text-center">
+        <div className={`mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-r ${category.color} text-2xl shadow-lg md:h-16 md:w-16 md:text-3xl`}>
+          {category.icon}
+        </div>
+        <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 md:text-xl">{category.title}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">{category.description}</p>
+      </div>
+
+      <div className="space-y-4">
+        {category.skills.map((skill) => (
+          <div key={skill.name}>
+            <div className="mb-2 flex items-center justify-between gap-3">
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200 md:text-base">{skill.name}</span>
+              <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">{skill.level}%</span>
+            </div>
+            <div className="h-2 w-full rounded-full bg-slate-200 dark:bg-slate-700">
+              <div
+                className={`h-2 rounded-full bg-gradient-to-r ${category.color} transition-all duration-1000 ease-out`}
+                style={{ width: `${skill.level}%` }}
+              ></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Skills() {
+  const [activeCategory, setActiveCategory] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const skillCategories = [
     {
       title: "Frontend",
@@ -59,6 +94,20 @@ export default function Skills() {
     "Git", "GitHub", "Docker", "Postman", "Linux", "VS Code", "Jira", "Agile Methodology"
   ];
 
+  useEffect(() => {
+    if (isPaused) return undefined;
+
+    const interval = window.setInterval(() => {
+      setActiveCategory((current) => (current + 1) % skillCategories.length);
+    }, 4500);
+
+    return () => window.clearInterval(interval);
+  }, [isPaused, skillCategories.length]);
+
+  const showCategory = (index) => {
+    setActiveCategory((index + skillCategories.length) % skillCategories.length);
+  };
+
   return (
     <section className="section-padding bg-gradient-to-br from-white to-gray-50 dark:from-slate-950 dark:to-slate-900">
       <div className="max-w-7xl mx-auto">
@@ -70,40 +119,65 @@ export default function Skills() {
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4 md:gap-8">
+        <div
+          className="hidden gap-6 md:grid md:grid-cols-2 xl:grid-cols-4 md:gap-8"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onFocus={() => setIsPaused(true)}
+          onBlur={() => setIsPaused(false)}
+        >
           {skillCategories.map((category, index) => (
             <div
               key={category.title}
-              className={`glass-effect rounded-2xl p-5 md:p-7 card-shadow ${
+              className={`${
                 index % 2 === 0 ? 'fade-in' : 'fade-in-delayed'
               }`}
             >
-              <div className="mb-6 text-center">
-                <div className={`mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-r ${category.color} text-2xl shadow-lg md:h-16 md:w-16 md:text-3xl`}>
-                  {category.icon}
-                </div>
-                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 md:text-xl">{category.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">{category.description}</p>
-              </div>
-
-              <div className="space-y-4">
-                {category.skills.map((skill) => (
-                  <div key={skill.name}>
-                    <div className="mb-2 flex items-center justify-between gap-3">
-                      <span className="text-sm font-medium text-slate-700 dark:text-slate-200 md:text-base">{skill.name}</span>
-                      <span className="text-sm font-semibold text-slate-500 dark:text-slate-400">{skill.level}%</span>
-                    </div>
-                    <div className="h-2 w-full rounded-full bg-slate-200 dark:bg-slate-700">
-                      <div
-                        className={`h-2 rounded-full bg-gradient-to-r ${category.color} transition-all duration-1000 ease-out`}
-                        style={{ width: `${skill.level}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <SkillCategoryCard category={category} />
             </div>
           ))}
+        </div>
+
+        <div
+          className="md:hidden"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onFocus={() => setIsPaused(true)}
+          onBlur={() => setIsPaused(false)}
+        >
+          <div key={skillCategories[activeCategory].title} className="animate-capability-slide" aria-live="polite">
+            <SkillCategoryCard category={skillCategories[activeCategory]} />
+          </div>
+          <div className="mt-4 flex items-center justify-between">
+            <button
+              type="button"
+              onClick={() => showCategory(activeCategory - 1)}
+              className="rounded-full border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-blue-500 hover:text-blue-600 dark:border-slate-600 dark:text-slate-200"
+              aria-label="Show previous skill category"
+            >
+              ←
+            </button>
+            <div className="flex gap-2" aria-label="Choose skill category">
+              {skillCategories.map((category, index) => (
+                <button
+                  key={category.title}
+                  type="button"
+                  onClick={() => showCategory(index)}
+                  className={`h-2.5 rounded-full transition-all ${index === activeCategory ? "w-8 bg-blue-600" : "w-2.5 bg-slate-300 dark:bg-slate-600"}`}
+                  aria-label={`Show ${category.title} skills`}
+                  aria-current={index === activeCategory ? "true" : undefined}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => showCategory(activeCategory + 1)}
+              className="rounded-full border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-blue-500 hover:text-blue-600 dark:border-slate-600 dark:text-slate-200"
+              aria-label="Show next skill category"
+            >
+              →
+            </button>
+          </div>
         </div>
 
         <div className="mt-10 md:mt-16 fade-in">

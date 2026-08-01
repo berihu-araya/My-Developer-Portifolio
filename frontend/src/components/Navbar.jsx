@@ -159,6 +159,8 @@ export default function Navbar() {
               className="rounded-lg border border-slate-300 bg-white/90 p-1 text-2xl leading-none text-slate-700 shadow-sm transition-colors hover:border-blue-500 hover:text-blue-600 focus:outline-none dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-200"
               onClick={() => setIsOpen(!isOpen)}
               aria-label={isOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isOpen}
+              aria-controls="mobile-navigation"
             >
               {isOpen ? '✖' : '☰'}
             </button>
@@ -166,7 +168,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Navigation Menu */}
-        <div className={`md:hidden fixed inset-x-0 top-16 z-40 border-t border-slate-300 bg-white/95 backdrop-blur-xl shadow-xl transition-all duration-300 dark:border-slate-700 dark:bg-slate-950/95 ${isOpen ? 'opacity-100' : 'pointer-events-none opacity-0'}`}>
+        <div id="mobile-navigation" className={`md:hidden fixed inset-x-0 top-16 z-40 border-t border-slate-300 bg-white/95 backdrop-blur-xl shadow-xl transition-all duration-300 dark:border-slate-700 dark:bg-slate-950/95 ${isOpen ? 'opacity-100' : 'pointer-events-none opacity-0'}`}>
           <div className="max-h-[calc(100vh-4rem)] overflow-y-auto px-4 ">
             {navLinks.map((link) => {
               const isActive = activeSection === link.id;

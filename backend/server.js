@@ -2,12 +2,18 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const rateLimit = require('express-rate-limit');
 
 // Load environment variables
 dotenv.config();
 
+if (process.env.NODE_ENV === 'production' && !process.env.FRONTEND_URL) {
+  throw new Error('FRONTEND_URL must be configured in production');
+}
+
 const app = express();
 const PORT = process.env.PORT || 5000;
+let server;
 
 // Middleware
 app.use(cors({
@@ -15,8 +21,19 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '50kb' }));
 app.use(express.urlencoded({ extended: true }));
+
+const contactLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 5,
+  standardHeaders: 'draft-8',
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: 'Too many messages submitted. Please try again later.'
+  }
+});
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -30,6 +47,7 @@ app.get('/api/health', (req, res) => {
 
 // Routes
 const contactRoutes = require('./routes/contactRoutes');
+app.use('/api/contact', contactLimiter);
 app.use('/api', contactRoutes);
 
 // 404 handler for undefined routes
@@ -99,7 +117,7 @@ const startServer = async () => {
   try {
     await connectDB();
 
-    app.listen(PORT, () => {
+    server = app.listen(PORT, () => {
       console.log(`
 🚀 Portfolio Backend Server Started!
 📍 Running on: http://localhost:${PORT}
@@ -115,11 +133,13 @@ const startServer = async () => {
 };
 
 // Handle unhandled promise rejections
-process.on('unhandledRejection', (err, promise) => {
+process.on('unhandledRejection', (err) => {
   console.log(`Unhandled Rejection: ${err.message}`);
-  server.close(() => {
+  if (server) {
+    server.close(() => process.exit(1));
+  } else {
     process.exit(1);
-  });
+  }
 });
 
 // Handle uncaught exceptions
@@ -131,9 +151,13 @@ process.on('uncaughtException', (err) => {
 // Graceful shutdown
 process.on('SIGTERM', () => {
   console.log('SIGTERM received, shutting down gracefully');
-  server.close(() => {
-    console.log('Process terminated');
-  });
+  if (server) {
+    server.close(() => console.log('Process terminated'));
+  }
 });
 
-startServer();
+if (require.main === module) {
+  startServer();
+}
+
+module.exports = { app, startServer };

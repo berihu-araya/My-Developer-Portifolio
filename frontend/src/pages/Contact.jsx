@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 export default function Contact() {
+  const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
@@ -25,7 +26,7 @@ export default function Contact() {
       newErrors.message = "Message is required";
     } else if (form.message.trim().length < 10) {
       newErrors.message = "Message must be at least 10 characters";
-    } else if (form.message.length > 500) {
+    } else if (form.message.trim().length > 500) {
       newErrors.message = "Message must be less than 500 characters";
     }
 
@@ -52,7 +53,7 @@ export default function Contact() {
     setSubmitStatus(null);
 
     try {
-      const response = await fetch("http://localhost:5000/api/contact", {
+      const response = await fetch(`${apiUrl}/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -108,11 +109,13 @@ export default function Contact() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    <label htmlFor="contact-name" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                       Full Name <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="text"
+                      id="contact-name"
+                      maxLength={50}
                       value={form.name}
                       onChange={(e) => handleInputChange('name', e.target.value)}
                       className={`w-full px-3 md:px-4 py-2 md:py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 ${
@@ -125,11 +128,13 @@ export default function Contact() {
                     )}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    <label htmlFor="contact-email" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                       Email Address <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="email"
+                      id="contact-email"
+                      maxLength={254}
                       value={form.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
                       className={`w-full px-3 md:px-4 py-2 md:py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 ${
@@ -144,11 +149,13 @@ export default function Contact() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  <label htmlFor="contact-message" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                     Message <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     rows="4"
+                    id="contact-message"
+                    maxLength={500}
                     value={form.message}
                     onChange={(e) => handleInputChange('message', e.target.value)}
                     className={`w-full px-3 md:px-4 py-2 md:py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 bg-white/70 dark:bg-slate-900/70 backdrop-blur-sm resize-none text-slate-900 dark:text-slate-100 placeholder:text-slate-400 ${
@@ -159,7 +166,7 @@ export default function Contact() {
                   {errors.message && (
                     <p className="text-red-500 text-sm mt-1">{errors.message}</p>
                   )}
-                  <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
+                  <p aria-live="polite" className="text-slate-500 dark:text-slate-400 text-sm mt-1">
                     {form.message.length}/500 characters
                   </p>
                 </div>

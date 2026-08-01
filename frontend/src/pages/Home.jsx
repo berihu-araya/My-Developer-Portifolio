@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import About from "./About";
 import Skills from "./Skills";
@@ -8,8 +8,65 @@ import Contact from "./Contact";
 import Certifications from "../components/Certifications";
 import { Typewriter } from "react-simple-typewriter";
 
+function CapabilityCard({ capability }) {
+  return (
+    <>
+      <div className="mb-3 flex items-center gap-3">
+        <div className={`flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${capability.color} text-xl`}>
+          {capability.icon}
+        </div>
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{capability.title}</h3>
+      </div>
+      <ul className="space-y-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">
+        {capability.points.map((point) => (
+          <li key={point}>• {point}</li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
 export default function Home() {
   const location = useLocation();
+  const [activeCapability, setActiveCapability] = useState(0);
+  const [isCapabilityPaused, setIsCapabilityPaused] = useState(false);
+
+  const capabilities = [
+    {
+      icon: "🌐",
+      title: "Full-Stack Development",
+      color: "from-blue-500 to-cyan-500",
+      points: [
+        "Build responsive and scalable web applications",
+        "Develop modern frontends and robust backend systems",
+        "Integrate APIs, databases, and third-party services",
+      ],
+    },
+    {
+      icon: "⚙️",
+      title: "Odoo ERP Development",
+      color: "from-purple-500 to-pink-500",
+      points: [
+        "Develop and customize Odoo ERP modules",
+        "Automate workflows and improve business efficiency",
+        "Deliver tailored ERP solutions for real business needs",
+      ],
+    },
+  ];
+
+  useEffect(() => {
+    if (isCapabilityPaused) return undefined;
+
+    const interval = window.setInterval(() => {
+      setActiveCapability((current) => (current + 1) % capabilities.length);
+    }, 4500);
+
+    return () => window.clearInterval(interval);
+  }, [isCapabilityPaused, capabilities.length]);
+
+  const showCapability = (index) => {
+    setActiveCapability((index + capabilities.length) % capabilities.length);
+  };
 
   useEffect(() => {
     const hash = location.hash.replace('#', '');
@@ -60,29 +117,60 @@ export default function Home() {
               I&apos;m a passionate Full-Stack & Odoo ERP Developer focused on building scalable web applications and customized ERP solutions that help businesses automate workflows and improve productivity.
             </p>
 
-            <div className="mx-auto mb-8 grid gap-4 md:grid-cols-2">
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-left shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-slate-700 dark:bg-slate-800/80">
-                <div className="mb-3 flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 text-xl">🌐</div>
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Full-Stack Development</h3>
-                </div>
-                <ul className="space-y-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">
-                  <li>• Build responsive and scalable web applications</li>
-                  <li>• Develop modern frontends and robust backend systems</li>
-                  <li>• Integrate APIs, databases, and third-party services</li>
-                </ul>
+            <div
+              className="mx-auto mb-8 md:grid md:grid-cols-2 md:gap-4"
+              onMouseEnter={() => setIsCapabilityPaused(true)}
+              onMouseLeave={() => setIsCapabilityPaused(false)}
+              onFocus={() => setIsCapabilityPaused(true)}
+              onBlur={() => setIsCapabilityPaused(false)}
+            >
+              <div className="hidden rounded-2xl border border-slate-200 bg-slate-50 p-5 text-left shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-slate-700 dark:bg-slate-800/80 md:block">
+                <CapabilityCard capability={capabilities[0]} />
               </div>
 
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 text-left shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-slate-700 dark:bg-slate-800/80">
-                <div className="mb-3 flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 text-xl">⚙️</div>
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Odoo ERP Development</h3>
+              <div className="hidden rounded-2xl border border-slate-200 bg-slate-50 p-5 text-left shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-slate-700 dark:bg-slate-800/80 md:block">
+                <CapabilityCard capability={capabilities[1]} />
+              </div>
+
+              <div className="md:hidden">
+                <div
+                  key={capabilities[activeCapability].title}
+                  className="animate-capability-slide rounded-2xl border border-slate-200 bg-slate-50 p-5 text-left shadow-sm dark:border-slate-700 dark:bg-slate-800/80"
+                  aria-live="polite"
+                >
+                  <CapabilityCard capability={capabilities[activeCapability]} />
                 </div>
-                <ul className="space-y-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">
-                  <li>• Develop and customize Odoo ERP modules</li>
-                  <li>• Automate workflows and improve business efficiency</li>
-                  <li>• Deliver tailored ERP solutions for real business needs</li>
-                </ul>
+
+                <div className="mt-4 flex items-center justify-between">
+                  <button
+                    type="button"
+                    onClick={() => showCapability(activeCapability - 1)}
+                    className="rounded-full border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-blue-500 hover:text-blue-600 dark:border-slate-600 dark:text-slate-200"
+                    aria-label="Show previous capability"
+                  >
+                    ←
+                  </button>
+                  <div className="flex gap-2" aria-label="Choose capability">
+                    {capabilities.map((capability, index) => (
+                      <button
+                        key={capability.title}
+                        type="button"
+                        onClick={() => showCapability(index)}
+                        className={`h-2.5 rounded-full transition-all ${index === activeCapability ? "w-8 bg-blue-600" : "w-2.5 bg-slate-300 dark:bg-slate-600"}`}
+                        aria-label={`Show ${capability.title}`}
+                        aria-current={index === activeCapability ? "true" : undefined}
+                      />
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => showCapability(activeCapability + 1)}
+                    className="rounded-full border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-blue-500 hover:text-blue-600 dark:border-slate-600 dark:text-slate-200"
+                    aria-label="Show next capability"
+                  >
+                    →
+                  </button>
+                </div>
               </div>
             </div>
 
