@@ -15,6 +15,7 @@ backend/.env
 frontend/.env
 
 .env
+frontend/.env.example
 .env.local
 .env.development.local
 .env.test.local
