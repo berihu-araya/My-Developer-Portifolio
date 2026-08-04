@@ -1,5 +1,6 @@
 const express = require('express');
 const Contact = require('../models/Contact');
+const transporter = require('../config/mailer');
 
 const router = express.Router();
 
@@ -28,6 +29,21 @@ router.post('/contact', async (req, res) => {
       name: name.trim(),
       email: email.trim().toLowerCase(),
       message: message.trim()
+    });
+
+    // Send email to the portfolio owner's inbox
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_TO || process.env.EMAIL_USER,
+      replyTo: contact.email,
+      subject: `Portfolio contact message from ${contact.name}`,
+      html: `
+        <h2>New message from portfolio</h2>
+        <p><strong>Name:</strong> ${contact.name}</p>
+        <p><strong>Email:</strong> ${contact.email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${contact.message.replace(/\n/g, '<br>')}</p>
+      `
     });
 
     // Save to database

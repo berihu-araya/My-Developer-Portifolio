@@ -13,7 +13,11 @@ The repository includes `frontend/public/_redirects` for Netlify and `frontend/v
 
 1. Copy `backend/.env.example` to `backend/.env` on the server.
 2. Set `MONGODB_URI`, `PORT`, `NODE_ENV=production`, and the exact frontend origin in `FRONTEND_URL`.
-3. Run `npm install` and `npm start` from `backend`.
-4. Confirm `GET /api/health` returns a 200 response before testing the contact form.
+3. Set Gmail email credentials for contact messages:
+   - `EMAIL_USER=berihuaraya374@gmail.com`
+   - `EMAIL_PASSWORD=<your-gmail-app-password-or-smtp-password>`
+   - `EMAIL_TO=berihuaraya374@gmail.com`
+4. Run `npm install` and `npm start` from `backend`.
+5. Confirm `GET /api/health` returns a 200 response before testing the contact form.
 
 Never commit `.env` files. Rotate database credentials if a real secret was previously committed to Git history.

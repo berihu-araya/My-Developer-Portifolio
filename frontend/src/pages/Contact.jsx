@@ -220,7 +220,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-slate-800 dark:text-slate-100 text-sm md:text-base">Location</h4>
-                    <p className="text-slate-600 dark:text-slate-300 text-sm md:text-base">Mekelle, Ethiopia</p>
+                    <p className="text-slate-600 dark:text-slate-300 text-sm md:text-base">Addis Abeba, Ethiopia</p>
                   </div>
                 </div>
               </div>

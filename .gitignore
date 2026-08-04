@@ -12,6 +12,7 @@ frontend/node_modules/
 # Environment files
 # ============================================
 backend/.env
+backend/.env.dev
 frontend/.env
 
 .env
