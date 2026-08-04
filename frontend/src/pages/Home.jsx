@@ -30,6 +30,7 @@ export default function Home() {
   const location = useLocation();
   const [activeCapability, setActiveCapability] = useState(0);
   const [isCapabilityPaused, setIsCapabilityPaused] = useState(false);
+  const [typewriterIndex, setTypewriterIndex] = useState(0);
 
   const capabilities = [
     {
@@ -54,18 +55,44 @@ export default function Home() {
     },
   ];
 
+  // Timing calculations for typewriter synchronization
+  // "Full-Stack Developer" = 22 chars, "Odoo ERP Developer" = 18 chars
+  // typeSpeed: 80ms, deleteSpeed: 50ms, delaySpeed: 1800ms
+  const fullStackTypeTime = 22 * 80; // 1760ms (typing "Full-Stack Developer")
+  const fullStackDelayTime = 1800; // 1800ms (pause after typing)
+  const fullStackDeleteTime = 22 * 50; // 1100ms (deleting "Full-Stack Developer")
+  
+  const odooTypeTime = 18 * 80; // 1440ms (typing "Odoo ERP Developer")
+  const odooDelayTime = 1800; // 1800ms (pause after typing)
+  const odooDeleteTime = 18 * 50; // 900ms (deleting "Odoo ERP Developer")
+  
+  const totalCycleTime = fullStackTypeTime + fullStackDelayTime + fullStackDeleteTime + odooTypeTime + odooDelayTime + odooDeleteTime; // 8800ms
+
+  // Track real-time position in typewriter cycle to sync with what's being typed
   useEffect(() => {
     if (isCapabilityPaused) return undefined;
 
     const interval = window.setInterval(() => {
-      setActiveCapability((current) => (current + 1) % capabilities.length);
-    }, 4500);
+      const now = Date.now();
+      const cyclePosition = now % totalCycleTime;
+
+      // Determine which capability should be shown based on what's being typed
+      if (cyclePosition < fullStackTypeTime + fullStackDelayTime) {
+        // Full-Stack Developer is being typed or showing with delay
+        setActiveCapability(0);
+        setTypewriterIndex(0);
+      } else {
+        // Odoo ERP Developer is being typed or showing with delay
+        setActiveCapability(1);
+        setTypewriterIndex(1);
+      }
+    }, 50); // Update every 50ms for smooth real-time tracking
 
     return () => window.clearInterval(interval);
-  }, [isCapabilityPaused, capabilities.length]);
+  }, [isCapabilityPaused, fullStackTypeTime, fullStackDelayTime, totalCycleTime]);
 
   const showCapability = (index) => {
-    setActiveCapability((index + capabilities.length) % capabilities.length);
+    setTypewriterIndex((index + capabilities.length) % capabilities.length);
   };
 
   useEffect(() => {
