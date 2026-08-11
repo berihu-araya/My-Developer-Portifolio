@@ -24,6 +24,13 @@ router.post('/contact', async (req, res) => {
       });
     }
 
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
+      return res.status(500).json({
+        success: false,
+        message: 'Email configuration is missing. Please configure EMAIL_USER and EMAIL_PASSWORD.'
+      });
+    }
+
     // Create new contact entry
     const contact = new Contact({
       name: name.trim(),
@@ -77,7 +84,7 @@ router.post('/contact', async (req, res) => {
 
     res.status(500).json({
       success: false,
-      message: 'Server error. Please try again later.'
+      message: error?.response || 'Server error. Please try again later.'
     });
   }
 });

@@ -59,15 +59,21 @@ export default function Contact() {
         body: JSON.stringify(form),
       });
 
+      const data = await response.json().catch(() => ({}));
+
       if (response.ok) {
         setSubmitStatus('success');
         setForm({ name: "", email: "", message: "" });
         setErrors({});
       } else {
-        throw new Error('Failed to send message');
+        throw new Error(data.message || 'Failed to send message');
       }
     } catch (error) {
       setSubmitStatus('error');
+      setErrors(prev => ({
+        ...prev,
+        submit: error.message || 'Failed to send message. Please try again or contact me directly.'
+      }));
     } finally {
       setIsSubmitting(false);
     }
@@ -102,7 +108,9 @@ export default function Contact() {
                   <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-xl p-4 mb-4 md:mb-6">
                     <div className="flex items-center">
                       <span className="text-red-500 text-xl mr-3">✕</span>
-                      <p className="text-red-800 dark:text-red-300 font-medium text-sm md:text-base">Failed to send message. Please try again or contact me directly.</p>
+                      <p className="text-red-800 dark:text-red-300 font-medium text-sm md:text-base">
+                        {errors.submit || 'Failed to send message. Please try again or contact me directly.'}
+                      </p>
                     </div>
                   </div>
                 )}
