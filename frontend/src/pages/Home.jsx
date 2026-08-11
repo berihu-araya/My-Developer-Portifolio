@@ -30,7 +30,7 @@ export default function Home() {
   const location = useLocation();
   const [activeCapability, setActiveCapability] = useState(0);
   const [isCapabilityPaused, setIsCapabilityPaused] = useState(false);
-  const [typewriterIndex, setTypewriterIndex] = useState(0);
+  const [setTypewriterIndex] = useState(0);
 
   const capabilities = [
     {
