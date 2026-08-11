@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function Contact() {
-  const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+  const apiUrl = process.env.production.REACT_APP_API_URL || "http://localhost:5000/api";
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
