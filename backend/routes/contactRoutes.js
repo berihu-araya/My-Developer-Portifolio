@@ -84,7 +84,7 @@ router.post('/contact', async (req, res) => {
 
     res.status(500).json({
       success: false,
-      message: error?.response || 'Server error. Please try again later.'
+      message: error?.response || 'Server error. Please try again later.' // Include error response if available
     });
   }
 });
