@@ -30,7 +30,7 @@ export default function Home() {
   const location = useLocation();
   const [activeCapability, setActiveCapability] = useState(0);
   const [isCapabilityPaused, setIsCapabilityPaused] = useState(false);
-  const [setTypewriterIndex] = useState(0);
+  
 
   const capabilities = [
     {
@@ -68,32 +68,33 @@ export default function Home() {
   
   const totalCycleTime = fullStackTypeTime + fullStackDelayTime + fullStackDeleteTime + odooTypeTime + odooDelayTime + odooDeleteTime; // 8800ms
 
-  // Track real-time position in typewriter cycle to sync with what's being typed
   useEffect(() => {
-    if (isCapabilityPaused) return undefined;
+  if (isCapabilityPaused) return undefined;
 
-    const interval = window.setInterval(() => {
-      const now = Date.now();
-      const cyclePosition = now % totalCycleTime;
+  const interval = window.setInterval(() => {
+    const now = Date.now();
+    const cyclePosition = now % totalCycleTime;
 
-      // Determine which capability should be shown based on what's being typed
-      if (cyclePosition < fullStackTypeTime + fullStackDelayTime) {
-        // Full-Stack Developer is being typed or showing with delay
-        setActiveCapability(0);
-        setTypewriterIndex(0);
-      } else {
-        // Odoo ERP Developer is being typed or showing with delay
-        setActiveCapability(1);
-        setTypewriterIndex(1);
-      }
-    }, 50); // Update every 50ms for smooth real-time tracking
+    if (cyclePosition < fullStackTypeTime + fullStackDelayTime) {
+      setActiveCapability(0);
+    } else {
+      setActiveCapability(1);
+    }
+  }, 50);
 
-    return () => window.clearInterval(interval);
-  }, [isCapabilityPaused, fullStackTypeTime, fullStackDelayTime, totalCycleTime]);
+  return () => window.clearInterval(interval);
+}, [
+  isCapabilityPaused,
+  totalCycleTime,
+  fullStackTypeTime,
+  fullStackDelayTime,
+]);
 
-  const showCapability = (index) => {
-    setTypewriterIndex((index + capabilities.length) % capabilities.length);
-  };
+ const showCapability = (index) => {
+  setActiveCapability(
+    (index + capabilities.length) % capabilities.length
+  );
+};
 
   useEffect(() => {
     const hash = location.hash.replace('#', '');
