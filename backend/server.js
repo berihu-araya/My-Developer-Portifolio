@@ -21,14 +21,25 @@ const allowedOrigins = [
   'http://127.0.0.1:3000'
 ].filter(Boolean);
 
+const isAllowedOrigin = (origin) => {
+  if (!origin) return true;
+
+  if (allowedOrigins.includes(origin)) return true;
+
+  return /^https:\/\/.*\.vercel\.app$/i.test(origin) ||
+    /^https:\/\/.*\.vercel\.dev$/i.test(origin) ||
+    /^https:\/\/localhost(:\d+)?$/i.test(origin);
+};
+
 // Middleware
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (isAllowedOrigin(origin)) {
       callback(null, true);
       return;
     }
 
+    console.warn('Blocked CORS origin:', origin);
     callback(new Error('Not allowed by CORS'));
   },
   credentials: true
