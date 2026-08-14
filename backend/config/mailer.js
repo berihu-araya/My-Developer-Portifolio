@@ -1,14 +1,17 @@
 const nodemailer = require("nodemailer");
 
+const sanitizeEmailPassword = (value = '') => value.replace(/\s+/g, '');
+
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+  port: 587,
+  secure: false,
   family: 4,
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD
+    pass: sanitizeEmailPassword(process.env.EMAIL_PASSWORD)
   }
 });
 
 module.exports = transporter;
+module.exports.sanitizeEmailPassword = sanitizeEmailPassword;
