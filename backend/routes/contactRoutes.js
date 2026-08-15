@@ -24,13 +24,6 @@ router.post('/contact', async (req, res) => {
       });
     }
 
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
-      return res.status(500).json({
-        success: false,
-        message: 'Email configuration is missing. Please configure EMAIL_USER and EMAIL_PASSWORD.'
-      });
-    }
-
     // Create new contact entry
     const contact = new Contact({
       name: name.trim(),
@@ -38,25 +31,33 @@ router.post('/contact', async (req, res) => {
       message: message.trim()
     });
 
-    // Send email to the portfolio owner's inbox
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_TO || process.env.EMAIL_USER,
-      replyTo: contact.email,
-      subject: `Portfolio contact message from ${contact.name}`,
-      html: `
-        <h2>New message from portfolio</h2>
-        <p><strong>Name:</strong> ${contact.name}</p>
-        <p><strong>Email:</strong> ${contact.email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${contact.message.replace(/\n/g, '<br>')}</p>
-      `
-    });
-
-    // Save to database
     await contact.save();
 
-    res.status(201).json({
+    const hasMailProvider = Boolean(
+      process.env.RESEND_API_KEY && process.env.RESEND_FROM
+    ) || Boolean(
+      process.env.EMAIL_USER && process.env.EMAIL_PASSWORD
+    );
+
+    if (hasMailProvider) {
+      transporter.sendMail({
+        from: process.env.RESEND_FROM || process.env.EMAIL_USER,
+        to: process.env.EMAIL_TO || process.env.EMAIL_USER || process.env.RESEND_FROM,
+        replyTo: contact.email,
+        subject: `Portfolio contact message from ${contact.name}`,
+        html: `
+          <h2>New message from portfolio</h2>
+          <p><strong>Name:</strong> ${contact.name}</p>
+          <p><strong>Email:</strong> ${contact.email}</p>
+          <p><strong>Message:</strong></p>
+          <p>${contact.message.replace(/\n/g, '<br>')}</p>
+        `
+      }).catch((error) => {
+        console.error('Email delivery failed after saving contact:', error);
+      });
+    }
+
+    return res.status(201).json({
       success: true,
       message: 'Message sent successfully! I will get back to you soon.'
     });
