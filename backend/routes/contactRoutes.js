@@ -24,7 +24,16 @@ router.post('/contact', async (req, res) => {
       });
     }
 
-    // Create new contact entry
+    const hasResend = Boolean(process.env.RESEND_API_KEY && process.env.RESEND_FROM);
+    const hasGmail = Boolean(process.env.EMAIL_USER && process.env.EMAIL_PASSWORD);
+
+    if (!hasResend && !hasGmail) {
+      return res.status(503).json({
+        success: false,
+        message: 'Email service is not configured on the server.'
+      });
+    }
+
     const contact = new Contact({
       name: name.trim(),
       email: email.trim().toLowerCase(),
@@ -47,11 +56,7 @@ router.post('/contact', async (req, res) => {
       `
     };
 
-    if (process.env.RESEND_API_KEY && process.env.RESEND_FROM) {
-      await transporter.sendMail(mailOptions);
-    } else if (process.env.EMAIL_USER && process.env.EMAIL_PASSWORD) {
-      await transporter.sendMail(mailOptions);
-    }
+    await transporter.sendMail(mailOptions);
 
     return res.status(201).json({
       success: true,
@@ -61,7 +66,6 @@ router.post('/contact', async (req, res) => {
   } catch (error) {
     console.error('Contact form error:', error);
 
-    // Handle validation errors
     if (error.name === 'ValidationError') {
       const errors = Object.values(error.errors).map(err => err.message);
       return res.status(400).json({
@@ -71,7 +75,6 @@ router.post('/contact', async (req, res) => {
       });
     }
 
-    // Handle duplicate key errors (if email uniqueness is added later)
     if (error.code === 11000) {
       return res.status(400).json({
         success: false,
@@ -79,9 +82,9 @@ router.post('/contact', async (req, res) => {
       });
     }
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: error?.response || 'Server error. Please try again later.' // Include error response if available
+      message: error?.response || 'Server error. Please try again later.'
     });
   }
 });
