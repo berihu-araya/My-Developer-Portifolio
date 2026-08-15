@@ -33,28 +33,24 @@ router.post('/contact', async (req, res) => {
 
     await contact.save();
 
-    const hasMailProvider = Boolean(
-      process.env.RESEND_API_KEY && process.env.RESEND_FROM
-    ) || Boolean(
-      process.env.EMAIL_USER && process.env.EMAIL_PASSWORD
-    );
+    const mailOptions = {
+      from: process.env.RESEND_FROM || process.env.EMAIL_USER,
+      to: process.env.EMAIL_TO || process.env.EMAIL_USER || process.env.RESEND_FROM,
+      replyTo: contact.email,
+      subject: `Portfolio contact message from ${contact.name}`,
+      html: `
+        <h2>New message from portfolio</h2>
+        <p><strong>Name:</strong> ${contact.name}</p>
+        <p><strong>Email:</strong> ${contact.email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${contact.message.replace(/\n/g, '<br>')}</p>
+      `
+    };
 
-    if (hasMailProvider) {
-      transporter.sendMail({
-        from: process.env.RESEND_FROM || process.env.EMAIL_USER,
-        to: process.env.EMAIL_TO || process.env.EMAIL_USER || process.env.RESEND_FROM,
-        replyTo: contact.email,
-        subject: `Portfolio contact message from ${contact.name}`,
-        html: `
-          <h2>New message from portfolio</h2>
-          <p><strong>Name:</strong> ${contact.name}</p>
-          <p><strong>Email:</strong> ${contact.email}</p>
-          <p><strong>Message:</strong></p>
-          <p>${contact.message.replace(/\n/g, '<br>')}</p>
-        `
-      }).catch((error) => {
-        console.error('Email delivery failed after saving contact:', error);
-      });
+    if (process.env.RESEND_API_KEY && process.env.RESEND_FROM) {
+      await transporter.sendMail(mailOptions);
+    } else if (process.env.EMAIL_USER && process.env.EMAIL_PASSWORD) {
+      await transporter.sendMail(mailOptions);
     }
 
     return res.status(201).json({
