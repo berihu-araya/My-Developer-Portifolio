@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
+import CVModal from './CVModal';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isCVModalOpen, setIsCVModalOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -180,6 +182,9 @@ export default function Navbar() {
 
   return (
     <>
+      {/* CV Modal */}
+      <CVModal isOpen={isCVModalOpen} onClose={() => setIsCVModalOpen(false)} />
+
       {/* Mobile Drawer Overlay */}
       <div 
         className={`fixed inset-0 bg-black/60 z-40 backdrop-blur-sm transition-opacity duration-300 md:hidden 
@@ -192,7 +197,7 @@ export default function Navbar() {
           ? 'bg-white/85 dark:bg-[#090d16]/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 shadow-lg shadow-black/5' 
           : 'bg-white/60 dark:bg-[#090d16]/60 backdrop-blur-sm border-b border-transparent'
       }`}>
-        <div className="max-w-7xl mx-auto flex justify-between items-center py-3.5 px-4 sm:px-6 md:px-12 lg:px-20">
+        <div className="max-w-7xl mx-auto flex justify-between items-center py-3 px-4 sm:px-6 md:px-12 lg:px-20">
           {/* Logo & Identity */}
           <button 
             onClick={() => handleNavClick(navLinks[0])}
@@ -211,18 +216,18 @@ export default function Navbar() {
                 <span className="font-bold text-base md:text-lg text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors">
                   Berihu Araya
                 </span>
-                <span className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-semibold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 rounded border border-emerald-300/50 dark:border-emerald-700/50">
-                  DEV
+                <span className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-semibold font-mono bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 rounded border border-emerald-300/50 dark:border-emerald-700/50">
+                  SWE
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium tracking-tight">
-                Full-Stack &amp; Odoo ERP Developer
+                Full-Stack &amp; Odoo ERP Engineer
               </p>
             </div>
           </button>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2 text-sm font-medium">
+          <nav className="hidden md:flex items-center space-x-1 lg:space-x-1.5 text-sm font-medium">
             {navLinks.map((link) => {
               const isActive = activeSection === link.id;
 
@@ -241,16 +246,29 @@ export default function Navbar() {
                 </button>
               );
             })}
+            
             <div className="pl-3 border-l border-slate-200 dark:border-slate-800 flex items-center gap-2">
               <ThemeToggle />
-              <a
-                href="/Berihu_Araya_Resume.pdf"
-                download="Berihu_Araya_Resume.pdf"
-                className="hidden lg:inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-slate-950 transition-colors shadow-sm shadow-emerald-500/20"
-                target="_blank"
-                rel="noopener noreferrer"
+              
+              {/* Interactive CV Quickview */}
+              <button
+                type="button"
+                onClick={() => setIsCVModalOpen(true)}
+                className="hidden lg:inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 transition-colors shadow-sm"
               >
-                <span>CV</span>
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span>View CV</span>
+              </button>
+
+              <a
+                href="/Berihu_Araya_CV.pdf"
+                download="Berihu_Araya_Gebrihans_CV.pdf"
+                className="hidden xl:inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-slate-950 transition-colors shadow-sm shadow-emerald-500/20"
+              >
+                <span>Download</span>
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
@@ -309,15 +327,30 @@ export default function Navbar() {
                 </button>
               );
             })}
-            <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
+            <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsOpen(false);
+                  setIsCVModalOpen(true);
+                }}
+                className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 font-semibold text-sm"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span>Preview CV In-App</span>
+              </button>
+
               <a
-                href="/Berihu_Araya_Resume.pdf"
-                download="Berihu_Araya_Resume.pdf"
+                href="/Berihu_Araya_CV.pdf"
+                download="Berihu_Araya_Gebrihans_CV.pdf"
                 className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold text-sm transition-colors"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <span>Download Resume / CV</span>
+                <span>Download PDF CV</span>
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>

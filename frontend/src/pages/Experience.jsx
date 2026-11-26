@@ -1,30 +1,34 @@
 export default function Experience() {
   const experiences = [
     {
-      company: "Niyat Consultancy & Software Company",
-      position: "Odoo ERP Developer",
-      period: "September 2025 - Present",
-      description: "Developed and customized Odoo ERP solutions for Wagwago Business Group, building scalable business modules and automating workflows to improve operational efficiency across multiple business operations.",
+      company: "NIYAT CONSULTANCY PLC",
+      location: "Addis Ababa, Ethiopia",
+      position: "Software Developer / Odoo ERP Developer",
+      period: "09/2025 – Present",
+      type: "Full-Time",
+      description: "Architecting, developing, and extending custom Odoo ERP solutions and backend services to streamline enterprise business workflows, transaction processing, and organizational operations.",
       achievements: [
-        "Designed and extended ERP functionalities across Sales, Purchase, Inventory, Accounting, HR, CRM, and other core business modules based on organizational requirements",
-        "Built custom models, views, reports, workflows, and backend business logic using Python and the Odoo framework while following clean, maintainable, and scalable software engineering practices",
-        "Integrated Odoo with external systems and third-party services through REST APIs, enabling secure and reliable data exchange between business applications",
-        "Collaborated with cross-functional teams to deliver robust ERP solutions tailored to business processes and operational needs"
+        "Designed, developed, and customized modular Odoo ERP solutions across Sales, Purchase, Inventory, Accounting, Human Resources, POS, and CRM modules.",
+        "Built custom models, views (XML/OWL), SQL reports, automated server actions, and backend business logic using Python and PostgreSQL.",
+        "Engineered REST API integrations connecting Odoo with external web services and third-party systems for real-time reliable data synchronization.",
+        "Applied clean architecture principles, code reviews, and database indexing to maintain enterprise-level performance and stability."
       ],
-      technologies: ["Odoo", "Python", "PostgreSQL", "XML", "JavaScript", "Git"]
+      technologies: ["Odoo ERP", "Python", "PostgreSQL", "XML", "JavaScript", "OWL Framework", "REST APIs", "Git"]
     },
     {
-      company: "Geez EdTech",
+      company: "Tigray Investment Bureau",
+      location: "Mekelle, Ethiopia",
       position: "Backend Developer",
-      period: "June 2025 - September 2025",
-      description: "Contributed to the development of scalable backend services for web applications using Node.js, Express.js, and MongoDB.",
+      period: "06/2024 – 09/2025",
+      type: "Professional Contract",
+      description: "Spearheaded the design and implementation of scalable backend microservices, database schemas, and RESTful APIs powering investment management and administrative web applications.",
       achievements: [
-        "Designed and implemented secure RESTful APIs, backend business logic, authentication, and authorization using JWT",
-        "Built and optimized MongoDB database schemas, CRUD operations, and API endpoints to ensure efficient data management and application performance",
-        "Integrated frontend applications with backend services to provide seamless data flow and reliable user experiences",
-        "Collaborated with frontend developers and senior engineers to deliver scalable, maintainable, and production-ready web applications"
+        "Developed and maintained robust backend applications using Python, Django, and Django REST Framework (DRF).",
+        "Engineered secure RESTful APIs, role-based access control (RBAC), token authentication, and data validation pipelines.",
+        "Optimized relational PostgreSQL databases with structured migrations, query profiling, and index strategies to enhance response times under load.",
+        "Collaborated with frontend teams and senior engineering staff to deliver production-ready, well-documented software solutions."
       ],
-      technologies: ["Node.js", "Express.js", "MongoDB", "React", "JavaScript", "REST APIs", "JWT", "Git", "GitHub"]
+      technologies: ["Python", "Django", "Django REST Framework", "PostgreSQL", "REST APIs", "JWT Auth", "Git", "Swagger"]
     }
   ];
 
@@ -32,67 +36,84 @@ export default function Experience() {
     <section className="section-padding max-w-6xl mx-auto">
       {/* Header */}
       <div className="text-center mb-10 md:mb-14">
+        <div className="badge-brand mb-3">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          Career Track Record
+        </div>
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-3">
           Professional <span className="text-emerald-600 dark:text-emerald-400">Experience</span>
         </h2>
         <div className="w-20 h-1 bg-emerald-500 mx-auto rounded-full"></div>
         <p className="text-base md:text-lg text-slate-600 dark:text-slate-300 mt-4 max-w-2xl mx-auto">
-          My journey in software development, from enterprise solutions to innovative web applications.
+          Delivering production-grade enterprise ERP architectures, robust distributed backends, and business-critical software systems.
         </p>
       </div>
 
-      {/* Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-        {experiences.map((exp) => (
+      {/* Experience Timeline */}
+      <div className="space-y-8">
+        {experiences.map((exp, index) => (
           <div
             key={exp.company}
-            className="glass-card rounded-2xl p-6 md:p-8 flex flex-col justify-between hover:border-emerald-500/40 transition-all duration-300"
+            className="glass-card rounded-3xl p-6 sm:p-8 md:p-10 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/40 transition-all duration-300 shadow-md relative overflow-hidden"
           >
-            <div>
-              {/* Header */}
-              <div className="mb-5 pb-5 border-b border-slate-200 dark:border-slate-800">
-                <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-1">
-                  {exp.position}
-                </h3>
-                <h4 className="text-base font-semibold text-emerald-600 dark:text-emerald-400 mb-2">
-                  {exp.company}
+            {/* Top Accent Line */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-400 to-transparent" />
+
+            {/* Header info */}
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-6 mb-6 border-b border-slate-200 dark:border-slate-800">
+              <div>
+                <div className="flex flex-wrap items-center gap-2.5 mb-2">
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+                    {exp.position}
+                  </h3>
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                    {exp.type}
+                  </span>
+                </div>
+                <h4 className="text-base sm:text-lg font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-2">
+                  <span>{exp.company}</span>
+                  <span className="text-xs text-slate-400 font-normal">• {exp.location}</span>
                 </h4>
-                <p className="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 inline-flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                  {exp.period}
-                </p>
               </div>
 
-              {/* Description */}
-              <p className="text-sm text-slate-700 dark:text-slate-300 mb-5 leading-relaxed">
-                {exp.description}
-              </p>
-
-              {/* Achievements */}
-              <div className="mb-6">
-                <ul className="space-y-2.5">
-                  {exp.achievements.map((achievement, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 text-xs font-bold flex-shrink-0 mt-0.5 border border-emerald-200/80 dark:border-emerald-800/60">
-                        ✓
-                      </span>
-                      <span>{achievement}</span>
-                    </li>
-                  ))}
-                </ul>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs sm:text-sm font-mono text-slate-700 dark:text-slate-300 self-start lg:self-center">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>{exp.period}</span>
               </div>
             </div>
 
-            {/* Technologies */}
-            <div className="pt-4 border-t border-slate-200 dark:border-slate-800">
-              <p className="text-xs uppercase font-semibold text-slate-500 dark:text-slate-400 mb-2.5 tracking-wide">
-                Technologies
+            {/* Overview */}
+            <p className="text-sm sm:text-base text-slate-700 dark:text-slate-300 mb-6 leading-relaxed">
+              {exp.description}
+            </p>
+
+            {/* Engineering Achievements */}
+            <div className="mb-6">
+              <h5 className="text-xs font-mono uppercase font-bold text-slate-400 tracking-wider mb-3">
+                Key Technical Contributions
+              </h5>
+              <ul className="space-y-3">
+                {exp.achievements.map((item, i) => (
+                  <li key={i} className="flex items-start gap-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 text-xs font-bold flex-shrink-0 mt-0.5 border border-emerald-200/80 dark:border-emerald-800/60">
+                      ✓
+                    </span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Tech Stack */}
+            <div className="pt-5 border-t border-slate-200 dark:border-slate-800">
+              <p className="text-xs font-mono uppercase font-semibold text-slate-400 tracking-wider mb-2.5">
+                Technologies &amp; Architecture
               </p>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-2">
                 {exp.technologies.map((tech) => (
                   <span
                     key={tech}
-                    className="px-2.5 py-1 rounded-md text-xs font-medium bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/50"
+                    className="px-3 py-1 rounded-lg text-xs font-mono font-medium bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/50"
                   >
                     {tech}
                   </span>

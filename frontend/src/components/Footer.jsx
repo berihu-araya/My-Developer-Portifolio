@@ -37,14 +37,13 @@ export default function Footer() {
                   Berihu Araya
                 </h3>
                 <p className="text-xs text-emerald-400 font-medium font-mono">
-                  Full-Stack &amp; Odoo ERP Developer
+                  Full-Stack (MERN) &amp; Odoo ERP Engineer
                 </p>
               </div>
             </div>
 
             <p className="text-slate-400 text-sm leading-relaxed max-w-md">
-              Full-Stack Developer specializing in MERN stack, Odoo ERP, and modern web technologies.
-              Creating scalable solutions that drive business success.
+              Software Engineer specializing in enterprise Odoo ERP solutions, distributed backends, and modern web architectures. Delivering production-ready business solutions.
             </p>
 
             {/* Social Channels */}

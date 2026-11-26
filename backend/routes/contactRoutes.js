@@ -2,89 +2,151 @@ const express = require('express');
 const Contact = require('../models/Contact');
 const transporter = require('../config/mailer');
 
-const router = express.Router(); // this is used to create a new router object that can handle routes for the contact form.
+const router = express.Router();
+
+// Helper to escape potential HTML characters for safe email rendering
+const escapeHtml = (text = '') => {
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+};
 
 // POST /api/contact - Handle contact form submissions
 router.post('/contact', async (req, res) => {
   try {
-    const { name, email, message } = req.body;
+    const { name, email, subject, message } = req.body;
 
-    // Validate required fields
-    if (
-      typeof name !== 'string' ||
-      typeof email !== 'string' ||
-      typeof message !== 'string' ||
-      !name.trim() ||
-      !email.trim() ||
-      !message.trim()
-    ) {
+    // Type and existence check
+    if (!name || !email || !message) {
       return res.status(400).json({
         success: false,
-        message: 'All fields are required'
+        message: 'Name, email, and message are required fields.'
       });
-    }  
+    }
 
-    const hasResend = Boolean(process.env.RESEND_API_KEY && process.env.RESEND_FROM); // Check if Resend is configured and this is used for sending emails. If not, fallback to Gmail SMTP.
-    const hasGmail = Boolean(process.env.EMAIL_USER && process.env.EMAIL_PASSWORD); // Check if Gmail is configured
+    const cleanName = String(name).trim().slice(0, 50);
+    const cleanEmail = String(email).trim().toLowerCase().slice(0, 254);
+    const cleanSubject = subject ? String(subject).trim().slice(0, 100) : 'General Inquiry';
+    const cleanMessage = String(message).trim().slice(0, 1000);
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(cleanEmail)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid email address.'
+      });
+    }
+
+    if (cleanName.length < 2) {
+      return res.status(400).json({
+        success: false,
+        message: 'Name must be at least 2 characters long.'
+      });
+    }
+
+    if (cleanMessage.length < 10) {
+      return res.status(400).json({
+        success: false,
+        message: 'Message must be at least 10 characters long.'
+      });
+    }
+
+    const hasResend = Boolean(process.env.RESEND_API_KEY && process.env.RESEND_FROM);
+    const hasGmail = Boolean(process.env.EMAIL_USER && process.env.EMAIL_PASSWORD);
 
     if (!hasResend && !hasGmail) {
       return res.status(503).json({
         success: false,
         message: 'Email service is not configured on the server.'
       });
-    } // If neither Resend nor Gmail is configured, return a 503 Service Unavailable response.
+    }
 
+    // Store in MongoDB
     const contact = new Contact({
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      message: message.trim()
-    }); // Create a new contact instance with the provided data, trimming whitespace and normalizing the email to lowercase.
+      name: cleanName,
+      email: cleanEmail,
+      message: cleanMessage
+    });
+    await contact.save();
 
-    await contact.save(); // Save the contact instance to the database. This will trigger Mongoose validation and save the document.
+    const escapedName = escapeHtml(cleanName);
+    const escapedEmail = escapeHtml(cleanEmail);
+    const escapedSubject = escapeHtml(cleanSubject);
+    const escapedMessage = escapeHtml(cleanMessage).replace(/\n/g, '<br>');
 
+    // Notification email to Berihu
     const mailOptions = {
       from: process.env.RESEND_FROM || process.env.EMAIL_USER,
-      to: process.env.EMAIL_TO || process.env.EMAIL_USER || process.env.RESEND_FROM, // Send to the configured recipient email or fallback to the sender email
-      replyTo: contact.email,
-      subject: `Portfolio contact message from ${contact.name}`,
+      to: process.env.EMAIL_TO || process.env.EMAIL_USER || process.env.RESEND_FROM,
+      replyTo: cleanEmail,
+      subject: `[Portfolio Inquiry] ${escapedSubject} from ${escapedName}`,
       html: `
-        <h2>New message from portfolio</h2>
-        <p><strong>Name:</strong> ${contact.name}</p>
-        <p><strong>Email:</strong> ${contact.email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${contact.message.replace(/\n/g, '<br>')}</p>
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
+          <div style="border-bottom: 2px solid #10b981; padding-bottom: 12px; margin-bottom: 20px;">
+            <h2 style="color: #0f172a; margin: 0; font-size: 20px;">New Portfolio Contact Message</h2>
+            <span style="font-size: 12px; color: #64748b; font-family: monospace;">Time: ${new Date().toUTCString()}</span>
+          </div>
+          <p style="margin: 8px 0; font-size: 14px; color: #334155;"><strong>From:</strong> ${escapedName} &lt;<a href="mailto:${escapedEmail}" style="color: #10b981;">${escapedEmail}</a>&gt;</p>
+          <p style="margin: 8px 0; font-size: 14px; color: #334155;"><strong>Subject:</strong> ${escapedSubject}</p>
+          <div style="margin-top: 16px; padding: 16px; background-color: #f8fafc; border-radius: 8px; border: 1px solid #cbd5e1;">
+            <p style="margin: 0; font-size: 14px; color: #1e293b; line-height: 1.6;">${escapedMessage}</p>
+          </div>
+        </div>
       `
-    }; // Prepare the email options, including the sender, recipient, subject, and HTML body. The message content is formatted to preserve line breaks.
+    };
+
+    // Auto-reply acknowledgment email to sender
+    const autoReplyOptions = {
+      from: process.env.RESEND_FROM || process.env.EMAIL_USER,
+      to: cleanEmail,
+      subject: `Thank you for reaching out, ${escapedName} - Berihu Araya`,
+      html: `
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
+          <h2 style="color: #0f172a; margin: 0 0 12px 0; font-size: 18px;">Message Received</h2>
+          <p style="font-size: 14px; color: #334155; line-height: 1.6;">
+            Hi ${escapedName},<br><br>
+            Thank you for contacting me through my portfolio. I have received your message regarding <strong>${escapedSubject}</strong> and will review it promptly.
+          </p>
+          <p style="font-size: 14px; color: #334155; line-height: 1.6;">
+            Best regards,<br>
+            <strong>Berihu Araya Gebrihans</strong><br>
+            <span style="font-size: 12px; color: #64748b;">Full-Stack &amp; Odoo ERP Software Engineer</span><br>
+            <a href="https://berihu-araya-portifolio.vercel.app/" style="font-size: 12px; color: #10b981;">Portfolio</a> • 
+            <a href="https://www.linkedin.com/in/berihu-araya-159b0033b/" style="font-size: 12px; color: #10b981;">LinkedIn</a>
+          </p>
+        </div>
+      `
+    };
 
     await transporter.sendMail(mailOptions);
+    transporter.sendMail(autoReplyOptions).catch(err => {
+      console.warn('Auto-responder delivery non-fatal error:', err.message);
+    });
 
     return res.status(201).json({
       success: true,
-      message: 'Message sent successfully! I will get back to you soon.'
+      message: 'Your message has been received! I will review your inquiry and get back to you promptly.'
     });
 
   } catch (error) {
-    console.error('Contact form error:', error);
+    console.error('Contact route internal error:', error);
 
     if (error.name === 'ValidationError') {
       const errors = Object.values(error.errors).map(err => err.message);
       return res.status(400).json({
         success: false,
-        message: 'Validation error',
+        message: 'Validation failed',
         errors
       });
-    } // Handle Mongoose validation errors and return a 400 Bad Request response with the error messages.
-
-    if (error.code === 11000) {
-      return res.status(400).json({
-        success: false,
-        message: 'A message from this email already exists'
-      });
-    } // after how many messages from the same email address are allowed, this handles duplicate key errors and returns a 400 Bad Request response.
+    }
 
     return res.status(500).json({
       success: false,
-      message: error?.response || 'Server error. Please try again later.'
+      message: 'Internal server error while processing your message. Please reach out directly to berihuaraya374@gmail.com.'
     });
   }
 });
