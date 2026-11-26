@@ -23,7 +23,7 @@ export default function Projects() {
       ],
       challenges: "Ensuring zero data loss during high-volume peak hours while syncing POS register sessions to core inventory and accounting ledgers across distributed branches.",
       image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=500&fit=crop",
-      liveLink: "https://github.com/berihu-araya",
+      liveLink: "https://erp.niyatconsultancy.com/",
       githubLink: "https://github.com/berihu-araya"
     },
     {
@@ -42,8 +42,8 @@ export default function Projects() {
       ],
       challenges: "Eliminating database contention and slow response times when thousands of student attendance records and grades are submitted concurrently.",
       image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&h=500&fit=crop",
-      liveLink: "https://github.com/bre-araya",
-      githubLink: "https://github.com/bre-araya"
+      liveLink: "https://github.com/berihu-araya/smart_sms",
+      githubLink: "https://github.com/berihu-araya/smart_sms"
     },
     {
       id: "ai-helpdesk-chatbot",

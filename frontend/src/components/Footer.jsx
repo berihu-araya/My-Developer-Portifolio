@@ -163,10 +163,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} Berihu Araya. Engineered with precision & modern web standards.</p>
-          <div className="flex items-center gap-4">
-            <span className="font-mono text-emerald-500">React 19 • Tailwind CSS </span>
-          </div>
+          <p>© {new Date().getFullYear()} Berihu Araya. All rights reserved.</p>
         </div>
       </div>
     </footer>

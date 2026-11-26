@@ -4,7 +4,6 @@ export default function About() {
   const imageRef = useRef(null);
   const aboutRef = useRef(null);
   const educationRef = useRef(null);
-  const honorsRef = useRef(null);
   const [visibleBlocks, setVisibleBlocks] = useState({});
 
   useEffect(() => {
@@ -19,7 +18,7 @@ export default function About() {
       { threshold: 0.15, rootMargin: "0px 0px -5% 0px" }
     );
 
-    [imageRef, aboutRef, educationRef, honorsRef].forEach((ref) => {
+    [imageRef, aboutRef, educationRef].forEach((ref) => {
       if (ref.current) observer.observe(ref.current);
     });
 
@@ -154,31 +153,6 @@ export default function About() {
                     National Exit Exam: 81 / 100
                   </span>
                 </div>
-                <p className="mt-3 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                  <strong>Coursework:</strong> Data Structures &amp; Algorithms, Database Management Systems, OOP, Operating Systems, Computer Networks, Artificial Intelligence, Machine Learning, NLP, Compiler Design, System Programming.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Honors, Awards & Community Leadership */}
-          <div
-            ref={honorsRef}
-            data-reveal="honors"
-            className="glass-card rounded-3xl p-6 md:p-8 space-y-4"
-          >
-            <h4 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <span className="text-emerald-500">🏆</span>
-              <span>Honors &amp; Leadership</span>
-            </h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm">
-              <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800">
-                <p className="font-bold text-slate-900 dark:text-white">Certificate of Academic Excellence</p>
-                <p className="text-slate-500 dark:text-slate-400 text-xs mt-1">Recognized for top academic performance during undergraduate CSE studies at MU-MIT.</p>
-              </div>
-              <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800">
-                <p className="font-bold text-slate-900 dark:text-white">Lab Coordinator &amp; Charity Leader</p>
-                <p className="text-slate-500 dark:text-slate-400 text-xs mt-1">Daily Lab Attendants Coordinator &amp; active member of ARAYA CHARITY CLUB education department.</p>
               </div>
             </div>
           </div>
