@@ -1,4 +1,11 @@
 {
+  "name": "berihu-araya-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "start": "cd frontend && npm start"
+  },
   "dependencies": {
     "react-simple-typewriter": "^5.0.1"
   }
