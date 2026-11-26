@@ -181,26 +181,25 @@ export default function Navbar() {
   return (
     <>
       {/* Mobile Drawer Overlay */}
-      <div 
+      <div
         className={`fixed inset-0 bg-black/60 z-40 backdrop-blur-sm transition-opacity duration-300 md:hidden 
           ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={() => setIsOpen(false)}
       />
-      
-      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'bg-white/85 dark:bg-[#090d16]/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 shadow-lg shadow-black/5' 
+
+      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+          ? 'bg-white/85 dark:bg-[#090d16]/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 shadow-lg shadow-black/5'
           : 'bg-white/60 dark:bg-[#090d16]/60 backdrop-blur-sm border-b border-transparent'
-      }`}>
+        }`}>
         <div className="max-w-7xl mx-auto flex justify-between items-center py-3 px-4 sm:px-6 md:px-12 lg:px-20">
           {/* Logo & Identity */}
-          <button 
+          <button
             onClick={() => handleNavClick(navLinks[0])}
             className="flex items-center gap-3 group text-left focus:outline-none"
           >
             <div className="relative">
-              <img 
-                src="/profile.jpeg" 
+              <img
+                src="/profile.jpeg"
                 alt="Berihu Araya"
                 className="w-10 h-10 rounded-full object-cover border-2 border-emerald-500/80 shadow-md group-hover:scale-105 transition-transform duration-300"
               />
@@ -210,9 +209,6 @@ export default function Navbar() {
               <div className="flex items-center gap-1.5">
                 <span className="font-bold text-base md:text-lg text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors">
                   Berihu Araya
-                </span>
-                <span className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-semibold font-mono bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 rounded border border-emerald-300/50 dark:border-emerald-700/50">
-                  SWE
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium tracking-tight">
@@ -230,21 +226,20 @@ export default function Navbar() {
                 <button
                   key={link.id}
                   onClick={() => handleNavClick(link)}
-                  className={`px-3 py-1.5 rounded-lg transition-all duration-200 text-sm font-medium ${
-                    isActive 
-                      ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 font-semibold' 
+                  className={`px-3 py-1.5 rounded-lg transition-all duration-200 text-sm font-medium ${isActive
+                      ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 font-semibold'
                       : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100/60 dark:hover:bg-slate-800/40'
-                  }`}
+                    }`}
                   aria-current={isActive ? 'page' : undefined}
                 >
                   {link.label}
                 </button>
               );
             })}
-            
+
             <div className="pl-3 border-l border-slate-200 dark:border-slate-800 flex items-center gap-2">
               <ThemeToggle />
-              
+
               <a
                 href="/Berihu_Araya_CV.pdf"
                 download="Berihu_Araya_Gebrihans_CV.pdf"
@@ -282,11 +277,10 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Navigation Drawer */}
-        <div 
-          id="mobile-navigation" 
-          className={`md:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl transition-all duration-300 overflow-hidden ${
-            isOpen ? 'max-h-[85vh] py-3 opacity-100 shadow-2xl' : 'max-h-0 py-0 opacity-0 pointer-events-none'
-          }`}
+        <div
+          id="mobile-navigation"
+          className={`md:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl transition-all duration-300 overflow-hidden ${isOpen ? 'max-h-[85vh] py-3 opacity-100 shadow-2xl' : 'max-h-0 py-0 opacity-0 pointer-events-none'
+            }`}
         >
           <div className="px-4 space-y-1">
             {navLinks.map((link) => {
@@ -296,11 +290,10 @@ export default function Navbar() {
                 <button
                   key={link.id}
                   onClick={() => handleNavClick(link)}
-                  className={`flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-left font-medium text-sm transition-colors ${
-                    isActive 
-                      ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400 font-semibold' 
+                  className={`flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-left font-medium text-sm transition-colors ${isActive
+                      ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400 font-semibold'
                       : 'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60'
-                  }`}
+                    }`}
                 >
                   <span className={`p-1.5 rounded-lg ${isActive ? 'bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'}`}>
                     {link.icon}
