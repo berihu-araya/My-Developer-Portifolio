@@ -1,10 +1,7 @@
-import { useState } from "react";
-
 export default function ProjectCard({
   title,
   description,
   tech = [],
-  image,
   liveLink,
   githubLink,
   featured = false,
@@ -12,7 +9,57 @@ export default function ProjectCard({
   timeline,
   onOpenModal
 }) {
-  const [imageError, setImageError] = useState(false);
+  // Generate a tailored schematic topology based on category/title
+  const getArchitectureFlow = () => {
+    if (title.toLowerCase().includes('odoo')) {
+      return {
+        left: 'Touch POS (OWL)',
+        center: 'Odoo Engine (Python)',
+        right: 'PostgreSQL Ledger',
+        status: 'Production Live: erp.niyatconsultancy.com'
+      };
+    }
+    if (title.toLowerCase().includes('school')) {
+      return {
+        left: 'Next.js Frontend',
+        center: 'Express + Redis Cache',
+        right: 'PostgreSQL DB',
+        status: 'Repo: github.com/berihu-araya/smart_sms'
+      };
+    }
+    if (title.toLowerCase().includes('chatbot') || title.toLowerCase().includes('helpdesk')) {
+      return {
+        left: 'React UI Client',
+        center: 'NLP Engine (Python)',
+        right: 'Django & PostgreSQL',
+        status: 'Ride-Hailing AI Pipeline'
+      };
+    }
+    if (title.toLowerCase().includes('disease') || title.toLowerCase().includes('plant')) {
+      return {
+        left: 'Flutter Android',
+        center: 'Offline TFLite (CNN)',
+        right: 'Django Sync API',
+        status: 'Edge Mobile AI Diagnostic'
+      };
+    }
+    if (title.toLowerCase().includes('commerce')) {
+      return {
+        left: 'React Storefront',
+        center: 'Express JWT Backend',
+        right: 'MongoDB & Cloudinary',
+        status: 'Secure Transactional Engine'
+      };
+    }
+    return {
+      left: 'Interactive UI',
+      center: 'REST API Service',
+      right: 'Data Persistence',
+      status: 'Production Architecture'
+    };
+  };
+
+  const flow = getArchitectureFlow();
 
   return (
     <div
@@ -20,46 +67,53 @@ export default function ProjectCard({
         featured ? 'ring-1 ring-emerald-500/40 shadow-glow-sm' : ''
       }`}
     >
-      {/* Media / Screenshot Preview */}
-      <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-900 border-b border-slate-200/60 dark:border-slate-800/80">
-        {image && !imageError ? (
-          <img
-            src={image}
-            alt={title}
-            onError={() => setImageError(true)}
-            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
-          />
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 text-slate-400">
-            <svg className="w-12 h-12 text-emerald-500/70 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-            </svg>
-            <span className="text-xs font-mono uppercase tracking-wider text-slate-400">{category}</span>
-          </div>
-        )}
-
-        {/* Ambient Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
+      {/* Visual Architectural Schematic Header */}
+      <div className="relative h-44 sm:h-48 w-full p-4 flex flex-col justify-between bg-slate-950 border-b border-slate-800/80 overflow-hidden font-mono">
+        {/* Subtle grid background */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-15 pointer-events-none" />
+        
+        {/* Radial subtle glow */}
+        <div className="absolute -top-10 -right-10 w-36 h-36 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
 
         {/* Top Badges */}
-        <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-          <span className="px-2.5 py-1 rounded-md text-[11px] font-semibold font-mono tracking-wide bg-slate-950/80 text-emerald-400 border border-emerald-500/30 backdrop-blur-md">
+        <div className="relative z-10 flex items-center justify-between">
+          <span className="px-2.5 py-1 rounded-md text-[10px] uppercase font-bold tracking-wider bg-slate-900/90 text-emerald-400 border border-emerald-500/30 backdrop-blur-md">
             {category}
           </span>
-          {featured && (
-            <span className="px-2.5 py-1 rounded-md text-[11px] font-semibold tracking-wide bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/30 backdrop-blur-md">
-              FEATURED
+          {timeline && (
+            <span className="text-[10px] text-slate-400 font-mono">
+              {timeline}
             </span>
           )}
         </div>
 
-        {/* Timeline Badge (Bottom Left of Image) */}
-        {timeline && (
-          <div className="absolute bottom-3 left-3 px-2.5 py-1 rounded-md text-[10px] font-mono font-medium bg-slate-950/80 text-slate-300 border border-slate-700/60 backdrop-blur-md">
-            {timeline}
+        {/* Architectural Flow Diagram */}
+        <div className="relative z-10 my-auto py-2">
+          <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-slate-300 gap-1 sm:gap-1.5">
+            <div className="flex-1 px-1.5 sm:px-2 py-1.5 rounded-lg bg-slate-900/90 border border-slate-800 text-center truncate">
+              <span className="text-slate-200 font-semibold">{flow.left}</span>
+            </div>
+            <span className="text-emerald-400 font-bold text-xs flex-shrink-0">➔</span>
+            <div className="flex-1 px-1.5 sm:px-2 py-1.5 rounded-lg bg-emerald-950/40 border border-emerald-500/30 text-center truncate">
+              <span className="text-emerald-300 font-semibold">{flow.center}</span>
+            </div>
+            <span className="text-emerald-400 font-bold text-xs flex-shrink-0">➔</span>
+            <div className="flex-1 px-1.5 sm:px-2 py-1.5 rounded-lg bg-slate-900/90 border border-slate-800 text-center truncate">
+              <span className="text-slate-200 font-semibold">{flow.right}</span>
+            </div>
           </div>
-        )}
+        </div>
+
+        {/* Status bar */}
+        <div className="relative z-10 flex items-center justify-between text-[10px] text-slate-400 pt-2 border-t border-slate-900">
+          <div className="flex items-center gap-1.5 truncate">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span className="truncate text-slate-400">{flow.status}</span>
+          </div>
+          <span className="text-emerald-400 text-[10px] group-hover:translate-x-0.5 transition-transform">
+            Details ↗
+          </span>
+        </div>
       </div>
 
       {/* Content */}
@@ -97,7 +151,7 @@ export default function ProjectCard({
               onClick={onOpenModal}
               className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 font-bold transition-colors"
             >
-              <span>Architecture &amp; Details</span>
+              <span>Architecture Case Study</span>
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>

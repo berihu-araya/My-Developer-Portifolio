@@ -207,14 +207,6 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Quick Response Badge */}
-            <div className="p-3.5 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/60 dark:border-emerald-800/50 flex items-center gap-3">
-              <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
-              <p className="text-xs text-emerald-900 dark:text-emerald-200 font-medium">
-                Fast Response: Typically responds within 24 hours
-              </p>
-            </div>
-
             {/* Social Link Cards */}
             <div className="pt-2">
               <p className="text-xs uppercase font-mono font-semibold text-slate-400 tracking-wider mb-3">
@@ -351,6 +343,14 @@ export default function Contact() {
                   {errors.message ? <span className="text-red-500">{errors.message}</span> : <span></span>}
                   <span>{form.message.length}/500</span>
                 </div>
+              </div>
+
+              {/* Fast Response Badge Below Message */}
+              <div className="p-3 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/60 dark:border-emerald-800/50 flex items-center gap-2.5">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
+                <p className="text-xs text-emerald-900 dark:text-emerald-200 font-medium">
+                  Fast Response: Typically responds within 24 hours
+                </p>
               </div>
 
               <button

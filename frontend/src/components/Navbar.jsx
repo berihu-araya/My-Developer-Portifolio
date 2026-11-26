@@ -1,13 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
-import CVModal from './CVModal';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isCVModalOpen, setIsCVModalOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -182,9 +180,6 @@ export default function Navbar() {
 
   return (
     <>
-      {/* CV Modal */}
-      <CVModal isOpen={isCVModalOpen} onClose={() => setIsCVModalOpen(false)} />
-
       {/* Mobile Drawer Overlay */}
       <div 
         className={`fixed inset-0 bg-black/60 z-40 backdrop-blur-sm transition-opacity duration-300 md:hidden 
@@ -250,25 +245,12 @@ export default function Navbar() {
             <div className="pl-3 border-l border-slate-200 dark:border-slate-800 flex items-center gap-2">
               <ThemeToggle />
               
-              {/* Interactive CV Quickview */}
-              <button
-                type="button"
-                onClick={() => setIsCVModalOpen(true)}
-                className="hidden lg:inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 transition-colors shadow-sm"
-              >
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                </svg>
-                <span>View CV</span>
-              </button>
-
               <a
                 href="/Berihu_Araya_CV.pdf"
                 download="Berihu_Araya_Gebrihans_CV.pdf"
-                className="hidden xl:inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-slate-950 transition-colors shadow-sm shadow-emerald-500/20"
+                className="hidden lg:inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-slate-950 transition-colors shadow-sm shadow-emerald-500/20"
               >
-                <span>Download</span>
+                <span>Download CV</span>
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                 </svg>
@@ -327,22 +309,7 @@ export default function Navbar() {
                 </button>
               );
             })}
-            <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setIsOpen(false);
-                  setIsCVModalOpen(true);
-                }}
-                className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl border border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 font-semibold text-sm"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                </svg>
-                <span>Preview CV In-App</span>
-              </button>
-
+            <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
               <a
                 href="/Berihu_Araya_CV.pdf"
                 download="Berihu_Araya_Gebrihans_CV.pdf"
