@@ -1,7 +1,12 @@
 import { useState } from "react";
 
 export default function Contact() {
-  const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+  const apiUrl =
+    process.env.REACT_APP_API_URL ||
+    (typeof window !== "undefined" &&
+    (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+      ? "http://localhost:5000/api"
+      : "https://my-developer-portifolio.onrender.com/api");
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
